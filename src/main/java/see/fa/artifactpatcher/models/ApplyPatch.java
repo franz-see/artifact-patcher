@@ -1,6 +1,10 @@
 package see.fa.artifactpatcher.models;
 
 import com.beust.jcommander.Parameter;
+import org.apache.commons.lang.StringUtils;
+
+import static org.apache.commons.io.FilenameUtils.getExtension;
+import static see.fa.artifactpatcher.util.FileUtil.replaceExtension;
 
 public class ApplyPatch {
 
@@ -24,6 +28,11 @@ public class ApplyPatch {
     }
 
     public String getOutput() {
+        if (output == null) {
+            String extension = getExtension(file);
+            String newExtension = StringUtils.isNotEmpty(extension) ? String.format("patched.%s", extension) : "patched";
+            output = replaceExtension(file, newExtension);
+        }
         return output;
     }
 
