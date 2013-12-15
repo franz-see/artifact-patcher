@@ -1,6 +1,6 @@
 <configuration debug="false">
-    <property name="AP_APPENDER_ENCODER_PATTERN" value="${ap.log.pattern:-%m%n}" />
-    <if condition='isDefined("ap.log.file")'>
+    <property name="AP_APPENDER_ENCODER_PATTERN" value="${ap.log.pattern:-[%date{dd MMM yyyy;HH:mm:ss.SSS}][%p] %m%n}" />
+    <if condition='p("ap.log.file").isEmpty()'>
         <then>
             <property name="AP_APPENDER" value="CONSOLE" />
         </then>
