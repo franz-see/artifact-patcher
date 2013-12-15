@@ -8,7 +8,37 @@
     <packaging>jar</packaging>
 
     <name>artifact-patcher</name>
-    <url>http://maven.apache.org</url>
+    <url>https://github.com/franz-see/artifact-patcher</url>
+
+    <description>Tool for patching ZIPs/JARs/EARs/WARs. Useful for transferring just an artifact patch instead of a huge new artifact over the network.</description>
+
+    <issueManagement>
+        <url>https://github.com/franz-see/artifact-patcher/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/franz-see/artifact-patcher</url>
+        <connection>scm:git:git://github.com/franz-see/artifact-patcher.git</connection>
+        <developerConnection>scm:git:git@github.com:franz-see/artifact-patcher.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <email>franz.see@gmail.com</email>
+            <name>Franz See</name>
+            <url>https://github.com/franz-see</url>
+            <id>franz-see</id>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
