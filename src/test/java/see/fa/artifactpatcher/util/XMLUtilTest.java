@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import see.fa.artifactpatcher.ArtifactPatcherException;
-import see.fa.artifactpatcher.models.ArtifactProfile;
-import see.fa.artifactpatcher.models.FileArtifactProfile;
+import see.fa.artifactpatcher.models.ArtifactDescription;
+import see.fa.artifactpatcher.models.FileArtifactDescription;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,13 +23,13 @@ public class XMLUtilTest {
     public static class WriteXML {
         @Test
         public void should_properly_convert_to_xml() throws IOException {
-            ArtifactProfile artifactProfile = new ArtifactProfile();
-            artifactProfile.getFiles().add(new FileArtifactProfile("dummy1", "checksum1"));
-            artifactProfile.getFiles().add(new FileArtifactProfile("dummy2", "checksum2"));
+            ArtifactDescription artifactDescription = new ArtifactDescription();
+            artifactDescription.getFiles().add(new FileArtifactDescription("dummy1", "checksum1"));
+            artifactDescription.getFiles().add(new FileArtifactDescription("dummy2", "checksum2"));
 
             File outputFile = new File(getAbsolutePathFromClasspath("actual-dummy.txt"));
 
-            XMLUtil.writeXML(artifactProfile, outputFile);
+            XMLUtil.writeXML(artifactDescription, outputFile);
 
             assertEquals(readFromClasspath("expected-dummy.xml"), readFromClasspath("actual-dummy.txt"));
         }
@@ -44,7 +44,7 @@ public class XMLUtilTest {
             outputFile.mkdirs();
             assertTrue("[GUARD] File should be a directory so that it cannot be written bytes.", outputFile.isDirectory());
 
-            XMLUtil.writeXML(new ArtifactProfile(), outputFile);
+            XMLUtil.writeXML(new ArtifactDescription(), outputFile);
         }
 
     }

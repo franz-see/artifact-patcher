@@ -5,9 +5,8 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.apache.commons.io.IOUtils;
 import see.fa.artifactpatcher.ArtifactPatcherException;
-import see.fa.artifactpatcher.Errors;
-import see.fa.artifactpatcher.models.ArtifactProfile;
-import see.fa.artifactpatcher.models.FileArtifactProfile;
+import see.fa.artifactpatcher.models.ArtifactDescription;
+import see.fa.artifactpatcher.models.FileArtifactDescription;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -21,9 +20,9 @@ public class XMLUtil {
 
     static {
         X_STREAM = new XStream(new StaxDriver());
-        X_STREAM.alias("artifactProfile", ArtifactProfile.class);
+        X_STREAM.alias("artifactDescription", ArtifactDescription.class);
         X_STREAM.alias("files", List.class, LinkedList.class);
-        X_STREAM.alias("file", FileArtifactProfile.class);
+        X_STREAM.alias("file", FileArtifactDescription.class);
     }
 
     public static void writeXML(Object object, File outputFile) {

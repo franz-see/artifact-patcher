@@ -6,16 +6,16 @@ import static see.fa.artifactpatcher.models.ParameterNames.*;
 import static see.fa.artifactpatcher.util.FileUtil.replaceExtension;
 
 public class CreatePatch {
-    private String profile;
+    private String description;
     private String file;
     private String output;
 
-    @Parameter(names = {DESCRIPTION_SHORT, DESCRIPTION_LONG}, description = "The profile of the file that would be patched with the output.", required = true)
-    public void setProfile(String profile) {
-        this.profile = profile;
+    @Parameter(names = {DESCRIPTION_SHORT, DESCRIPTION_LONG}, description = "The description of the file that would be patched with the output.", required = true)
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    @Parameter(names = {FILE_SHORT, FILE_LONG}, description = "The file that the patch would result to after applying it to the source of the profile.", required = true)
+    @Parameter(names = {FILE_SHORT, FILE_LONG}, description = "The file that the patch would result to after applying it to the source of the description.", required = true)
     public void setFile(String file) {
         this.file = file;
     }
@@ -36,7 +36,7 @@ public class CreatePatch {
         return output;
     }
 
-    public String getProfile() {
-        return profile;
+    public String getDescription() {
+        return description;
     }
 }

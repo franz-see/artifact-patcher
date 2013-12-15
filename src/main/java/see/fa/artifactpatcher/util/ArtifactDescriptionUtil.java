@@ -2,9 +2,8 @@ package see.fa.artifactpatcher.util;
 
 import org.apache.commons.io.IOUtils;
 import see.fa.artifactpatcher.ArtifactPatcherException;
-import see.fa.artifactpatcher.Errors;
-import see.fa.artifactpatcher.models.ArtifactProfile;
-import see.fa.artifactpatcher.models.FileArtifactProfile;
+import see.fa.artifactpatcher.models.ArtifactDescription;
+import see.fa.artifactpatcher.models.FileArtifactDescription;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,36 +18,36 @@ import static see.fa.artifactpatcher.Errors.UNABLE_TO_READ_ARTIFACT;
 import static see.fa.artifactpatcher.util.ChecksumUtil.shasum;
 import static see.fa.artifactpatcher.util.XMLUtil.readXML;
 
-public class ArtifactProfileUtil {
+public class ArtifactDescriptionUtil {
     
-    public static List<String> toFileNames(Collection<FileArtifactProfile> fileArtifactProfiles) {
+    public static List<String> toFileNames(Collection<FileArtifactDescription> fileArtifactDescriptions) {
         List<String> fileNames = new LinkedList<String>();
-        for (FileArtifactProfile fileArtifactProfile : fileArtifactProfiles) {
-            fileNames.add(fileArtifactProfile.getName());
+        for (FileArtifactDescription fileArtifactDescription : fileArtifactDescriptions) {
+            fileNames.add(fileArtifactDescription.getName());
         }
         return fileNames;
     }
 
-    public static ArtifactProfile readArtifactProfile(File file) {
-        ArtifactProfile artifactProfile = new ArtifactProfile();
-        readXML(file, artifactProfile);
-        return artifactProfile;
+    public static ArtifactDescription readArtifactDescription(File file) {
+        ArtifactDescription artifactDescription = new ArtifactDescription();
+        readXML(file, artifactDescription);
+        return artifactDescription;
     }
 
-    public static ArtifactProfile createArtifactProfile(File file) {
+    public static ArtifactDescription createArtifactDescription(File file) {
         ZipInputStream zipInputStream = null;
         try {
             zipInputStream = new ZipInputStream(new FileInputStream(file));
 
-            ArtifactProfile artifactProfile = new ArtifactProfile();
+            ArtifactDescription artifactDescription = new ArtifactDescription();
 
             ZipEntry zipEntry = zipInputStream.getNextEntry();
             while(zipEntry != null) {
-                artifactProfile.getFiles().add(new FileArtifactProfile(zipEntry.getName(), shasum(zipInputStream)));
+                artifactDescription.getFiles().add(new FileArtifactDescription(zipEntry.getName(), shasum(zipInputStream)));
 
                 zipEntry = zipInputStream.getNextEntry();
             }
-            return artifactProfile;
+            return artifactDescription;
         } catch (IOException e) {
             throw new ArtifactPatcherException(String.format(UNABLE_TO_READ_ARTIFACT, new File(".").getAbsolutePath()), e);
         } finally {

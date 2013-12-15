@@ -58,10 +58,10 @@ public class ArtifactPatcherTest {
 
         @Test(expected = ArtifactPatcherException.class)
         public void given_problem_with_file_then_throw_exception() throws IOException {
-            DescribeArtifact artifactProfile = new DescribeArtifact();
-            artifactProfile.setFile("this does not exist");
+            DescribeArtifact artifactDescription = new DescribeArtifact();
+            artifactDescription.setFile("this does not exist");
 
-            artifactPatcher.execute(artifactProfile);
+            artifactPatcher.execute(artifactDescription);
         }
     }
 
@@ -70,7 +70,7 @@ public class ArtifactPatcherTest {
         @Test
         public void create_artifact_patch_based_on_those_that_do_NOT_match() throws IOException, ZipException {
             CreatePatch createPatch = new CreatePatch();
-            createPatch.setProfile(getAbsolutePathFromClasspath("profile.xml"));
+            createPatch.setDescription(getAbsolutePathFromClasspath("description.xml"));
             createPatch.setFile(getAbsolutePathFromClasspath("test2.jar"));
             createPatch.setOutput(getAbsolutePathFromClasspath("test2.jar.patch"));
 

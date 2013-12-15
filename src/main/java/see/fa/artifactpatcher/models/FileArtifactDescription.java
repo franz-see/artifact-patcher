@@ -4,11 +4,11 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class FileArtifactProfile {
+public class FileArtifactDescription {
     private final String name;
     private final String checksum;
 
-    public FileArtifactProfile(String name, String checksum) {
+    public FileArtifactDescription(String name, String checksum) {
         this.name = name;
         this.checksum = checksum;
     }
@@ -31,10 +31,10 @@ public class FileArtifactProfile {
 
     @Override
     public boolean equals(Object o) {
-        if (!FileArtifactProfile.class.isInstance(o)) {
+        if (!FileArtifactDescription.class.isInstance(o)) {
             return false;
         }
-        FileArtifactProfile that = (FileArtifactProfile) o;
+        FileArtifactDescription that = (FileArtifactDescription) o;
         return new EqualsBuilder()
                 .append(this.getName(), that.getName())
                 .append(this.getChecksum(), that.getChecksum())

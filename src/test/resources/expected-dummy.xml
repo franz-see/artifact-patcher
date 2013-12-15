@@ -1,4 +1,4 @@
-<artifactProfile>
+<artifactDescription>
   <files>
     <file>
       <name>dummy1</name>
@@ -9,4 +9,4 @@
       <checksum>checksum2</checksum>
     </file>
   </files>
-</artifactProfile>
+</artifactDescription>

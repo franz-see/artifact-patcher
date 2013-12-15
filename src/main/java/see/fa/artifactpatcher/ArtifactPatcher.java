@@ -9,26 +9,26 @@ import java.io.File;
 import java.util.Collection;
 
 import static org.apache.commons.io.filefilter.FileFilterUtils.notFileFilter;
-import static see.fa.artifactpatcher.util.ArtifactProfileUtil.*;
+import static see.fa.artifactpatcher.util.ArtifactDescriptionUtil.*;
 import static see.fa.artifactpatcher.util.XMLUtil.writeXML;
 import static see.fa.artifactpatcher.util.ZipUtil.unzip;
 import static see.fa.artifactpatcher.util.ZipUtil.zip;
 
 public class ArtifactPatcher {
 
-    public static final String PATCH_ARTIFACT_PROFILE_XML = "artifact-profile.xml";
+    public static final String PATCH_ARTIFACT_DESCRIPTION_XML = "artifact-description.xml";
 
     public void execute(DescribeArtifact args) {
         File file = new File(args.getFile());
-        ArtifactProfile artifactProfile = createArtifactProfile(file);
-        writeXML(artifactProfile, new File(args.getOutput()));
+        ArtifactDescription artifactDescription = createArtifactDescription(file);
+        writeXML(artifactDescription, new File(args.getOutput()));
     }
 
     public void execute(CreatePatch args) {
-        ArtifactProfile sourceArtifactProfile = readArtifactProfile(new File(args.getProfile()));
-        ArtifactProfile destinationArtifactProfile = createArtifactProfile(new File(args.getFile()));
+        ArtifactDescription sourceArtifactDescription = readArtifactDescription(new File(args.getDescription()));
+        ArtifactDescription destinationArtifactDescription = createArtifactDescription(new File(args.getFile()));
 
-        @SuppressWarnings("unchecked") Collection<FileArtifactProfile> newFiles = CollectionUtils.subtract(destinationArtifactProfile.getFiles(), sourceArtifactProfile.getFiles());
+        @SuppressWarnings("unchecked") Collection<FileArtifactDescription> newFiles = CollectionUtils.subtract(destinationArtifactDescription.getFiles(), sourceArtifactDescription.getFiles());
 
         File workingDir = FileUtil.createTempDirectory("ArtifactPatcher", "CreatePatch");
         File sourceDir = new File(workingDir, "source");
@@ -37,13 +37,13 @@ public class ArtifactPatcher {
         unzip(new File(args.getFile()), sourceDir);
 
         FileUtil.copyDirectory(sourceDir, destinationDir, new NameFileFilter(toFileNames(newFiles)));
-        writeXML(destinationArtifactProfile, new File(destinationDir, PATCH_ARTIFACT_PROFILE_XML));
+        writeXML(destinationArtifactDescription, new File(destinationDir, PATCH_ARTIFACT_DESCRIPTION_XML));
 
         zip(destinationDir, args.getOutput());
     }
 
     public void execute(ApplyPatch args) {
-        ArtifactProfile toBePatchedArtifactProfile = createArtifactProfile(new File(args.getFile()));
+        ArtifactDescription toBePatchedArtifactDescription = createArtifactDescription(new File(args.getFile()));
 
         File workingDir = FileUtil.createTempDirectory("ArtifactPatcher", "ApplyPatch");
         File explodedJarToBePatched = new File(workingDir, "to_be_patched");
@@ -53,12 +53,12 @@ public class ArtifactPatcher {
         unzip(new File(args.getFile()), explodedJarToBePatched);
         unzip(new File(args.getPatch()), patchJarDir);
 
-        ArtifactProfile patchArtifactProfile = readArtifactProfile(new File(patchJarDir, PATCH_ARTIFACT_PROFILE_XML));
+        ArtifactDescription patchArtifactDescription = readArtifactDescription(new File(patchJarDir, PATCH_ARTIFACT_DESCRIPTION_XML));
 
-        @SuppressWarnings("unchecked") Collection<FileArtifactProfile> filesNotToCopy = CollectionUtils.subtract(toBePatchedArtifactProfile.getFiles(), patchArtifactProfile.getFiles());
+        @SuppressWarnings("unchecked") Collection<FileArtifactDescription> filesNotToCopy = CollectionUtils.subtract(toBePatchedArtifactDescription.getFiles(), patchArtifactDescription.getFiles());
 
         FileUtil.copyDirectory(explodedJarToBePatched, patchedJarDir, notFileFilter(new NameFileFilter(toFileNames(filesNotToCopy))));
-        FileUtil.copyDirectory(patchJarDir, patchedJarDir, notFileFilter(new NameFileFilter(PATCH_ARTIFACT_PROFILE_XML)));
+        FileUtil.copyDirectory(patchJarDir, patchedJarDir, notFileFilter(new NameFileFilter(PATCH_ARTIFACT_DESCRIPTION_XML)));
 
         zip(patchedJarDir, args.getOutput());
     }

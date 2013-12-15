@@ -1,4 +1,4 @@
-<artifactProfile>
+<artifactDescription>
   <files>
     <file>
       <name>file1.txt</name>
@@ -13,4 +13,4 @@
       <checksum>1eb2267bae4e47cab81f8866bbc7e06764ea9be0</checksum>
     </file>
   </files>
-</artifactProfile>
+</artifactDescription>
