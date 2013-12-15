@@ -1,15 +1,10 @@
 package see.fa.artifactpatcher;
 
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.ZipParameters;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import see.fa.artifactpatcher.models.*;
+import see.fa.artifactpatcher.util.FileUtil;
 import see.fa.artifactpatcher.util.XMLUtil;
 
 import java.io.*;
@@ -18,13 +13,17 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static see.fa.artifactpatcher.util.ChecksumUtil.shasum;
+import static see.fa.artifactpatcher.util.XMLUtil.readXML;
+import static see.fa.artifactpatcher.util.XMLUtil.writeXML;
+import static see.fa.artifactpatcher.util.ZipUtil.unzip;
+import static see.fa.artifactpatcher.util.ZipUtil.zip;
 
 public class ArtifactPatcher {
 
     public void execute(CreateArtifactProfile args) {
         File file = new File(args.getFile());
         ArtifactProfile artifactProfile = toArtifactProfiles(file);
-        XMLUtil.write(artifactProfile, new File(args.getOutput()));
+        writeXML(artifactProfile, new File(args.getOutput()));
     }
 
     public void execute(CreatePatch args) {
@@ -33,41 +32,20 @@ public class ArtifactPatcher {
 
         @SuppressWarnings("unchecked") Collection<FileArtifactProfile> newFiles = CollectionUtils.subtract(destinationArtifactProfile.getFiles(), sourceArtifactProfile.getFiles());
 
-        File workingDir = null;
-        try {
-            workingDir = File.createTempFile("ArtifactPatcher", "d");
-            workingDir.delete();
-            workingDir.mkdirs();
-            workingDir.deleteOnExit();
-        } catch (IOException e) {
-            throw new ArtifactPatcherException(String.format("Unable to create temp working directory at '%s'.", workingDir), e);
-        }
-
+        File workingDir = FileUtil.createTempDirectory("ArtifactPatcher", "d");
         File sourceDir = new File(workingDir, "source");
         File destinationDir = new File(workingDir, "destination");
 
         unzip(new File(args.getFile()), sourceDir.getAbsolutePath());
 
-        try {
-            FileUtils.copyDirectory(sourceDir, destinationDir, new NameFileFilter(toFileNames(newFiles)));
-        } catch (IOException e) {
-            throw new ArtifactPatcherException(String.format("Unable to copy from '%s' to '%s'.", sourceDir, destinationDir), e);
-        }
+        FileUtil.copyDirectory(sourceDir, destinationDir, new NameFileFilter(toFileNames(newFiles)));
+        writeXML(destinationArtifactProfile, new File(destinationDir, "artifact-profile.xml"));
 
-        XMLUtil.write(destinationArtifactProfile, new File(destinationDir, "artifact-profile.xml"));
+        zip(destinationDir, args.getOutput());
+    }
 
-        try {
-            ZipFile outputZip = new ZipFile(args.getOutput());
-            for (File file : destinationDir.listFiles()) {
-                if (file.isDirectory()) {
-                    outputZip.addFolder(file, new ZipParameters());
-                } else {
-                    outputZip.addFile(file, new ZipParameters());
-                }
-            }
-        } catch (ZipException e) {
-            throw new ArtifactPatcherException(String.format("Unable to create zip file '%s'.", args.getOutput()), e);
-        }
+    public void execute(ApplyPatch args) {
+
     }
 
     private List<String> toFileNames(Collection<FileArtifactProfile> fileArtifactProfiles) {
@@ -78,21 +56,9 @@ public class ArtifactPatcher {
         return fileNames;
     }
 
-    private void unzip(File file, String explodedDir) {
-        try {
-            new ZipFile(file).extractAll(explodedDir);
-        } catch (ZipException e) {
-            throw new ArtifactPatcherException(String.format("Unable to extract zip file '%s' to directory '%s'.", file, explodedDir), e);
-        }
-    }
-
-    public void execute(ApplyPatch args) {
-
-    }
-
     private ArtifactProfile readArtifactProfile(File file) {
         ArtifactProfile artifactProfile = new ArtifactProfile();
-        XMLUtil.read(file, artifactProfile);
+        readXML(file, artifactProfile);
         return artifactProfile;
     }
 

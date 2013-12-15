@@ -35,9 +35,13 @@ public class ClasspathUtil {
     }
 
     public static SortedMap<String, String> getAllFilesAndChecksums(String dirPath) throws IOException {
+        return getAllFilesAndChecksums(new File(dirPath));
+    }
+
+    public static SortedMap<String, String> getAllFilesAndChecksums(File directory) throws IOException {
         SortedMap<String, String> allFilesAndCheckums = new TreeMap<String, String>();
 
-        Iterator<File> fileIterator = FileUtils.iterateFiles(new File(dirPath), TRUE, TRUE);
+        Iterator<File> fileIterator = FileUtils.iterateFiles(directory, TRUE, TRUE);
         while(fileIterator.hasNext()) {
             File file = fileIterator.next();
             FileInputStream inputStream = null;

@@ -23,7 +23,7 @@ public class XMLUtil {
         X_STREAM.alias("file", FileArtifactProfile.class);
     }
 
-    public static void write(Object object, File outputFile) {
+    public static void writeXML(Object object, File outputFile) {
         Writer out = null;
         try {
             X_STREAM.marshal(object, new PrettyPrintWriter(new FileWriter(outputFile)));
@@ -34,7 +34,7 @@ public class XMLUtil {
         }
     }
 
-    public static <T> void read(File inputFile, T object) {
+    public static <T> void readXML(File inputFile, T object) {
         X_STREAM.fromXML(inputFile, object);
     }
 }
