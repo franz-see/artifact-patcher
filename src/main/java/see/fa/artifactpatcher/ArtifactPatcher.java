@@ -18,7 +18,7 @@ public class ArtifactPatcher {
 
     public static final String PATCH_ARTIFACT_PROFILE_XML = "artifact-profile.xml";
 
-    public void execute(CreateArtifactProfile args) {
+    public void execute(DescribeArtifact args) {
         File file = new File(args.getFile());
         ArtifactProfile artifactProfile = createArtifactProfile(file);
         writeXML(artifactProfile, new File(args.getOutput()));

@@ -5,12 +5,15 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.apache.commons.io.IOUtils;
 import see.fa.artifactpatcher.ArtifactPatcherException;
+import see.fa.artifactpatcher.Errors;
 import see.fa.artifactpatcher.models.ArtifactProfile;
 import see.fa.artifactpatcher.models.FileArtifactProfile;
 
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
+
+import static see.fa.artifactpatcher.Errors.UNABLE_TO_WRITE_ARTIFACT_DESCRIPTION;
 
 public class XMLUtil {
 
@@ -28,7 +31,7 @@ public class XMLUtil {
         try {
             X_STREAM.marshal(object, new PrettyPrintWriter(new FileWriter(outputFile)));
         } catch (IOException e) {
-            throw new ArtifactPatcherException(String.format("Unable to write artifact profile to %s.", outputFile.getAbsolutePath()), e);
+            throw new ArtifactPatcherException(String.format(UNABLE_TO_WRITE_ARTIFACT_DESCRIPTION, outputFile.getAbsolutePath()), e);
         } finally {
             IOUtils.closeQuietly(out);
         }

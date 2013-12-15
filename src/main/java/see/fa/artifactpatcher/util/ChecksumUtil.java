@@ -2,11 +2,14 @@ package see.fa.artifactpatcher.util;
 
 import org.apache.commons.io.IOUtils;
 import see.fa.artifactpatcher.ArtifactPatcherException;
+import see.fa.artifactpatcher.Errors;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Formatter;
+
+import static see.fa.artifactpatcher.Errors.UNABLE_TO_READ_INPUT_STREAM_FOR_CHECKSUM;
 
 public class ChecksumUtil {
 
@@ -17,7 +20,7 @@ public class ChecksumUtil {
         try {
             data = IOUtils.toByteArray(inputStream);
         } catch (IOException e) {
-            throw new ArtifactPatcherException("Unable to read input stream to generate checksum on.", e);
+            throw new ArtifactPatcherException(UNABLE_TO_READ_INPUT_STREAM_FOR_CHECKSUM, e);
         }
         return byteArray2Hex(SHASUM_MESSAGE_DIGEST.digest(data));
     }

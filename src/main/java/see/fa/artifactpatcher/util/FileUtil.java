@@ -3,9 +3,13 @@ package see.fa.artifactpatcher.util;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import see.fa.artifactpatcher.ArtifactPatcherException;
+import see.fa.artifactpatcher.Errors;
 
 import java.io.File;
 import java.io.IOException;
+
+import static see.fa.artifactpatcher.Errors.UNABLE_TO_COPY_DIRECTORY;
+import static see.fa.artifactpatcher.Errors.UNABLE_TO_CREATE_TEMP_WORKING_DIR;
 
 public class FileUtil {
     public static File createTempDirectory(String prefix, String suffix) {
@@ -13,7 +17,7 @@ public class FileUtil {
         try {
             tempDirectory = File.createTempFile(prefix, suffix);
         } catch (IOException e) {
-            throw new ArtifactPatcherException(String.format("Unable to create temp working directory at '%s'.", tempDirectory), e);
+            throw new ArtifactPatcherException(String.format(UNABLE_TO_CREATE_TEMP_WORKING_DIR, tempDirectory), e);
         }
         tempDirectory.delete();
         tempDirectory.mkdirs();
@@ -26,7 +30,7 @@ public class FileUtil {
         try {
             FileUtils.copyDirectory(sourceDir, targetDir, ioFileFilter);
         } catch (IOException e) {
-            throw new ArtifactPatcherException(String.format("Unable to copy from '%s' to '%s'.", sourceDir, targetDir), e);
+            throw new ArtifactPatcherException(String.format(UNABLE_TO_COPY_DIRECTORY, sourceDir, targetDir), e);
         }
     }
 

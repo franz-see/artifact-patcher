@@ -2,6 +2,7 @@ package see.fa.artifactpatcher.util;
 
 import org.apache.commons.io.IOUtils;
 import see.fa.artifactpatcher.ArtifactPatcherException;
+import see.fa.artifactpatcher.Errors;
 import see.fa.artifactpatcher.models.ArtifactProfile;
 import see.fa.artifactpatcher.models.FileArtifactProfile;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static see.fa.artifactpatcher.Errors.UNABLE_TO_READ_ARTIFACT;
 import static see.fa.artifactpatcher.util.ChecksumUtil.shasum;
 import static see.fa.artifactpatcher.util.XMLUtil.readXML;
 
@@ -48,7 +50,7 @@ public class ArtifactProfileUtil {
             }
             return artifactProfile;
         } catch (IOException e) {
-            throw new ArtifactPatcherException(String.format("Unable to read JAR/EAR/WAR//ZIP from dir '%s'.", new File(".").getAbsolutePath()), e);
+            throw new ArtifactPatcherException(String.format(UNABLE_TO_READ_ARTIFACT, new File(".").getAbsolutePath()), e);
         } finally {
             IOUtils.closeQuietly(zipInputStream);
         }

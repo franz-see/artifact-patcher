@@ -3,7 +3,7 @@ package see.fa.artifactpatcher;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import see.fa.artifactpatcher.models.ApplyPatch;
-import see.fa.artifactpatcher.models.CreateArtifactProfile;
+import see.fa.artifactpatcher.models.DescribeArtifact;
 import see.fa.artifactpatcher.models.CreatePatch;
 
 import java.io.IOException;
@@ -15,8 +15,8 @@ public class Main {
 
         ArtifactPatcher artifactPatcher = new ArtifactPatcher();
 
-        if (CreateArtifactProfile.class.isInstance(arguments)) {
-            artifactPatcher.execute((CreateArtifactProfile)arguments);
+        if (DescribeArtifact.class.isInstance(arguments)) {
+            artifactPatcher.execute((DescribeArtifact)arguments);
         } else if (CreatePatch.class.isInstance(arguments)) {
             artifactPatcher.execute((CreatePatch)arguments);
         } else if (ApplyPatch.class.isInstance(arguments)) {
@@ -26,8 +26,8 @@ public class Main {
 
     private static Object buildArguments(String[] args) {
         Object argumentObject = null;
-        if ("profile".equals(args[0])) {
-            argumentObject = new CreateArtifactProfile();
+        if ("describe".equals(args[0])) {
+            argumentObject = new DescribeArtifact();
         } else if ("diff".equals(args[0])) {
             argumentObject = new CreatePatch();
         } else if ("patch".equals(args[0])) {
@@ -46,7 +46,7 @@ public class Main {
             return arguments;
         } catch (ParameterException ex) {
             ex.printStackTrace();
-            new JCommander(new CreateArtifactProfile()).usage();
+            new JCommander(arguments).usage();
             return null;
         }
     }

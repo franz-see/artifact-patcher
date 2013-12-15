@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import see.fa.artifactpatcher.models.ApplyPatch;
-import see.fa.artifactpatcher.models.CreateArtifactProfile;
+import see.fa.artifactpatcher.models.DescribeArtifact;
 import see.fa.artifactpatcher.models.CreatePatch;
 
 import java.io.File;
@@ -23,7 +23,7 @@ import static see.fa.artifactpatcher.test.ClasspathUtil.readFromClasspath;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ArtifactPatcherTest.Execute_CreateArtifactProfile.class,
+        ArtifactPatcherTest.Execute_DescribeArtifact.class,
         ArtifactPatcherTest.Execute_CreatePatch.class,
         ArtifactPatcherTest.Execute_ApplyPatch.class
 })
@@ -40,17 +40,17 @@ public class ArtifactPatcherTest {
 
     }
 
-    public static class Execute_CreateArtifactProfile extends AbstractArtifactPatcherTestBase {
+    public static class Execute_DescribeArtifact extends AbstractArtifactPatcherTestBase {
 
         @Test
         public void should_unzip_jar_and_create_checksums_for_every_content() throws IOException {
-            CreateArtifactProfile createArtifactProfile = new CreateArtifactProfile();
-            createArtifactProfile.setFile(getAbsolutePathFromClasspath("test.jar"));
-            createArtifactProfile.setOutput(getAbsolutePathFromClasspath("test.xml"));
+            DescribeArtifact describeArtifact = new DescribeArtifact();
+            describeArtifact.setFile(getAbsolutePathFromClasspath("test.jar"));
+            describeArtifact.setOutput(getAbsolutePathFromClasspath("test.xml"));
 
-            artifactPatcher.execute(createArtifactProfile);
+            artifactPatcher.execute(describeArtifact);
 
-            String actualOutput = FileUtils.readFileToString(new File(createArtifactProfile.getOutput()));
+            String actualOutput = FileUtils.readFileToString(new File(describeArtifact.getOutput()));
             String expectedOutput = readFromClasspath("expected-test.xml");
 
             assertEquals(expectedOutput, actualOutput);
@@ -58,7 +58,7 @@ public class ArtifactPatcherTest {
 
         @Test(expected = ArtifactPatcherException.class)
         public void given_problem_with_file_then_throw_exception() throws IOException {
-            CreateArtifactProfile artifactProfile = new CreateArtifactProfile();
+            DescribeArtifact artifactProfile = new DescribeArtifact();
             artifactProfile.setFile("this does not exist");
 
             artifactPatcher.execute(artifactProfile);

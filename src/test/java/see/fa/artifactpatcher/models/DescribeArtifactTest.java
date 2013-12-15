@@ -12,9 +12,9 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CreateArtifactProfileTest.GetOutput.class
+        DescribeArtifactTest.GetOutput.class
 })
-public class CreateArtifactProfileTest {
+public class DescribeArtifactTest {
 
     @RunWith(Parameterized.class)
     public static class GetOutput {
@@ -43,11 +43,11 @@ public class CreateArtifactProfileTest {
 
         @Test
         public void should_resolve_effective_output() {
-            CreateArtifactProfile createArtifactProfile = new CreateArtifactProfile();
-            createArtifactProfile.setFile(file);
-            createArtifactProfile.setOutput(output);
+            DescribeArtifact describeArtifact = new DescribeArtifact();
+            describeArtifact.setFile(file);
+            describeArtifact.setOutput(output);
 
-            String actualOutput = createArtifactProfile.getOutput();
+            String actualOutput = describeArtifact.getOutput();
 
             assertEquals(message, expectedOutput, actualOutput);
         }
