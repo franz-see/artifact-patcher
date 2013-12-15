@@ -24,11 +24,11 @@ public class ZipUtil {
         }
     }
     
-    public static void unzip(File file, String explodedDir) {
+    public static void unzip(File file, File targetDir) {
         try {
-            new ZipFile(file).extractAll(explodedDir);
+            new ZipFile(file).extractAll(targetDir.getAbsolutePath());
         } catch (ZipException e) {
-            throw new ArtifactPatcherException(String.format("Unable to extract zip file '%s' to directory '%s'.", file, explodedDir), e);
+            throw new ArtifactPatcherException(String.format("Unable to extract zip file '%s' to directory '%s'.", file, targetDir.getAbsolutePath()), e);
         }
     }
 }

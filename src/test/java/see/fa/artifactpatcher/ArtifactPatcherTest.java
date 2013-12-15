@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import see.fa.artifactpatcher.models.ApplyPatch;
 import see.fa.artifactpatcher.models.CreateArtifactProfile;
 import see.fa.artifactpatcher.models.CreatePatch;
 
@@ -23,7 +24,8 @@ import static see.fa.artifactpatcher.test.ClasspathUtil.readFromClasspath;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ArtifactPatcherTest.Execute_CreateArtifactProfile.class,
-        ArtifactPatcherTest.Execute_CreateDiff.class
+        ArtifactPatcherTest.Execute_CreatePatch.class,
+        ArtifactPatcherTest.Execute_ApplyPatch.class
 })
 public class ArtifactPatcherTest {
 
@@ -63,7 +65,7 @@ public class ArtifactPatcherTest {
         }
     }
 
-    public static class Execute_CreateDiff extends AbstractArtifactPatcherTestBase {
+    public static class Execute_CreatePatch extends AbstractArtifactPatcherTestBase {
 
         @Test
         public void create_artifact_patch_based_on_those_that_do_NOT_match() throws IOException, ZipException {
@@ -82,6 +84,29 @@ public class ArtifactPatcherTest {
 
             SortedMap<String,String> actual = getAllFilesAndChecksums(actualPatchContents);
             SortedMap<String, String> expected = getAllFilesAndChecksums(getAbsolutePathFromClasspath("expected-test2-contents"));
+
+            assertArrayEquals(expected.entrySet().toArray(), actual.entrySet().toArray());
+        }
+    }
+
+    public static class Execute_ApplyPatch extends AbstractArtifactPatcherTestBase {
+
+        @Test
+        public void should_apply_patch_on_a_jar() throws ZipException, IOException {
+            ApplyPatch applyPatch = new ApplyPatch();
+            applyPatch.setFile(getAbsolutePathFromClasspath("test.jar"));
+            applyPatch.setPatch(getAbsolutePathFromClasspath("test.patch"));
+            applyPatch.setOutput(getAbsolutePathFromClasspath("actual-patched-test.jar"));
+
+            artifactPatcher.execute(applyPatch);
+
+            String actualPatchedContents = getAbsolutePathFromClasspath("actual-patched-test");
+
+            ZipFile zipFile = new ZipFile(applyPatch.getOutput());
+            zipFile.extractAll(actualPatchedContents);
+
+            SortedMap<String,String> actual = getAllFilesAndChecksums(actualPatchedContents);
+            SortedMap<String, String> expected = getAllFilesAndChecksums(getAbsolutePathFromClasspath("expected-patched-test"));
 
             assertArrayEquals(expected.entrySet().toArray(), actual.entrySet().toArray());
         }
