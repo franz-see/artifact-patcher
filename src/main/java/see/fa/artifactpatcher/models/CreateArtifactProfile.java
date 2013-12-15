@@ -16,6 +16,7 @@ public class CreateArtifactProfile {
         this.file = file;
     }
 
+    @Parameter(names = {"-o", "--output"}, description = "The output filename of the profile.", required = false)
     public void setOutput(String output) {
         this.output = output;
     }
