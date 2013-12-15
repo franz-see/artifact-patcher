@@ -23,7 +23,7 @@ public class ArtifactPatcher {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArtifactPatcher.class);
 
     public void execute(DescribeArtifact args) {
-        LOGGER.debug("Executing against {}.", args);
+        LOGGER.info("Executing against {}.", args);
 
         File file = new File(args.getFile());
         ArtifactDescription artifactDescription = createArtifactDescription(file);
@@ -34,7 +34,7 @@ public class ArtifactPatcher {
     }
 
     public void execute(CreatePatch args) {
-        LOGGER.debug("Executing against {}.", args);
+        LOGGER.info("Executing against {}.", args);
 
         ArtifactDescription sourceArtifactDescription = readArtifactDescription(new File(args.getDescription()));
         ArtifactDescription destinationArtifactDescription = createArtifactDescription(new File(args.getFile()));
@@ -56,7 +56,7 @@ public class ArtifactPatcher {
     }
 
     public void execute(ApplyPatch args) {
-        LOGGER.debug("Executing against {}.", args);
+        LOGGER.info("Executing against {}.", args);
 
         ArtifactDescription toBePatchedArtifactDescription = createArtifactDescription(new File(args.getFile()));
 

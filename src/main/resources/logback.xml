@@ -1,14 +1,29 @@
-<configuration>
+<configuration debug="false">
+    <property name="AP_APPENDER_ENCODER_PATTERN" value="${ap.log.pattern:-%m%n}" />
+    <if condition='isDefined("ap.log.file")'>
+        <then>
+            <property name="AP_APPENDER" value="CONSOLE" />
+        </then>
+        <else>
+            <property name="AP_APPENDER" value="FILE" />
+        </else>
+    </if>
+
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <File>${ap.log.file:-ap.log}</File>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%d %p %t %c - %m%n</Pattern>
-        </layout>
+        <File>${ap.log.file}</File>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${AP_APPENDER_ENCODER_PATTERN}</pattern>
+        </encoder>
     </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${AP_APPENDER_ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
     <root level="${ap.log.root.level:-WARN}">
-        <appender-ref ref="FILE"/>
+        <appender-ref ref="${AP_APPENDER}"/>
     </root>
-    <logger name="see.fa.artifactpatcher" level="${ap.log.level:-INFO}">
-        <appender-ref ref="FILE"/>
-    </logger>
+    <logger name="see.fa.artifactpatcher" level="${ap.log.level:-INFO}"/>
 </configuration>

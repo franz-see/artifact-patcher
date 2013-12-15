@@ -1,0 +1,14 @@
+<configuration debug="false">
+    <property name="AP_APPENDER_ENCODER_PATTERN" value="${ap.log.pattern:-%m%n}" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${AP_APPENDER_ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+    <logger name="see.fa.artifactpatcher" level="${ap.log.level:-INFO}"/>
+</configuration>
