@@ -2,28 +2,24 @@
     <property name="AP_APPENDER_ENCODER_PATTERN" value="${ap.log.pattern:-[%date{dd MMM yyyy;HH:mm:ss.SSS}][%p] %m%n}" />
     <if condition='p("ap.log.file").isEmpty()'>
         <then>
-            <property name="AP_APPENDER" value="CONSOLE" />
+            <appender name="AP_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>${AP_APPENDER_ENCODER_PATTERN}</pattern>
+                </encoder>
+            </appender>
         </then>
         <else>
-            <property name="AP_APPENDER" value="FILE" />
+            <appender name="AP_APPENDER" class="ch.qos.logback.core.FileAppender">
+                <File>${ap.log.file}</File>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                    <pattern>${AP_APPENDER_ENCODER_PATTERN}</pattern>
+                </encoder>
+            </appender>
         </else>
     </if>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <File>${ap.log.file}</File>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>${AP_APPENDER_ENCODER_PATTERN}</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${AP_APPENDER_ENCODER_PATTERN}</pattern>
-        </encoder>
-    </appender>
-
     <root level="${ap.log.root.level:-WARN}">
-        <appender-ref ref="${AP_APPENDER}"/>
+        <appender-ref ref="AP_APPENDER"/>
     </root>
     <logger name="see.fa.artifactpatcher" level="${ap.log.level:-INFO}"/>
 </configuration>
