@@ -1,0 +1,12 @@
+<artifactProfile>
+  <files>
+    <file>
+      <name>dummy1</name>
+      <checksum>checksum1</checksum>
+    </file>
+    <file>
+      <name>dummy2</name>
+      <checksum>checksum2</checksum>
+    </file>
+  </files>
+</artifactProfile>

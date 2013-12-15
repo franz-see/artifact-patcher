@@ -1,0 +1,16 @@
+<artifactProfile>
+  <files>
+    <file>
+      <name>file1.txt</name>
+      <checksum>38be7d1b981f2fb6a4a0a052453f887373dc1fe8</checksum>
+    </file>
+    <file>
+      <name>file2.txt</name>
+      <checksum>639daad06642a8eb86821ff7649e86f5f59c6139</checksum>
+    </file>
+    <file>
+      <name>file3.txt</name>
+      <checksum>1eb2267bae4e47cab81f8866bbc7e06764ea9be0</checksum>
+    </file>
+  </files>
+</artifactProfile>
