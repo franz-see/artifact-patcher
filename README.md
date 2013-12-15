@@ -24,7 +24,9 @@ Apply patch to old.jar (generates ```old.patched.jar```):
 FAQ:
 ----------------
 Q: What's a Description file?
+
 A: An XML describing an artifact - its contents and its checksums
 
 Q: Why do we need a Description file?
-A: Because the ```old.jar``` and the ```new.jar``` may not necessarily be in the same server. If the ```old.jar``` is in the remote server, you can just copy ```artifact-patcher-exec.jar``` on the remote server, generate the Description file ```old.xml```, copy the description file back to your local (where your ```new.jar```), generate ```new.patch``` from your local server, and copy the ```new.patch``` to the remote server to be applied to ```old.jar```. This prevents the copying of the whole of ```old.jar``` or ```new.jar``` back and forth through the network.
+
+A: Because the ```old.jar``` and the ```new.jar``` may not necessarily be in the same server. If the ```old.jar``` is in the remote server, you can just copy ```artifact-patcher-exec.jar``` on the remote server, generate the Description file ```old.xml```, copy the description file back to your local (where your ```new.jar```), generate ```new.patch``` from your local server, and copy the ```new.patch``` to the remote server to be applied to ```old.jar```. This prevents the copying of the whole of ```old.jar``` or ```new.jar``` back and forth through the network (and insteads, copies the ligher ```old.xml``` and ```new.patch```).
