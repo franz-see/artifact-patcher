@@ -1,5 +1,9 @@
 package see.fa.artifactpatcher.models;
 
+import java.io.File;
+
+import static see.fa.artifactpatcher.util.FileUtil.replaceExtension;
+
 public class CreatePatch {
     private String profile;
     private String file;
@@ -22,6 +26,9 @@ public class CreatePatch {
     }
 
     public String getOutput() {
+        if (output == null) {
+            output = replaceExtension(file, "patch");
+        }
         return output;
     }
 

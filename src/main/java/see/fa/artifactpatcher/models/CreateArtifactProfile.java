@@ -4,6 +4,8 @@ import com.beust.jcommander.Parameter;
 
 import java.io.File;
 
+import static see.fa.artifactpatcher.util.FileUtil.replaceExtension;
+
 public class CreateArtifactProfile {
 
     private String file;
@@ -19,11 +21,8 @@ public class CreateArtifactProfile {
     }
 
     public String getOutput() {
-        if (output == null && file != null) {
-            String baseName = new File(file).getName();
-            int extensionStart = baseName.lastIndexOf(".");
-            String baseNameWithoutExtension = extensionStart != -1 ? baseName.substring(0, extensionStart) : baseName;
-            output = String.format("%s.xml", baseNameWithoutExtension);
+        if (output == null) {
+            output = replaceExtension(file, "xml");
         }
         return output;
     }

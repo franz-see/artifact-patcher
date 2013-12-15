@@ -2,7 +2,6 @@ package see.fa.artifactpatcher.util;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.NameFileFilter;
 import see.fa.artifactpatcher.ArtifactPatcherException;
 
 import java.io.File;
@@ -29,5 +28,16 @@ public class FileUtil {
         } catch (IOException e) {
             throw new ArtifactPatcherException(String.format("Unable to copy from '%s' to '%s'.", sourceDir, targetDir), e);
         }
+    }
+
+    public static String replaceExtension(String filePath, String newExtension) {
+        if (filePath == null) {
+            return null;
+        }
+
+        String baseName = new File(filePath).getName();
+        int extensionIndex = baseName.lastIndexOf(".");
+        String baseNameWithoutExtension = extensionIndex != -1 ? baseName.substring(0, extensionIndex) : baseName;
+        return String.format("%s.%s", baseNameWithoutExtension, newExtension);
     }
 }
