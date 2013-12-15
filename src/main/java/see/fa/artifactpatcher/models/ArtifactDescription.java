@@ -4,12 +4,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class ArtifactDescription {
 
-    private List<FileArtifactDescription> files = new LinkedList<FileArtifactDescription>();
+    private SortedSet<FileArtifactDescription> files = new TreeSet<FileArtifactDescription>();
 
-    public List<FileArtifactDescription> getFiles() {
+    public SortedSet<FileArtifactDescription> getFiles() {
         return files;
     }
 

@@ -23,18 +23,18 @@ public class ArtifactPatcher {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArtifactPatcher.class);
 
     public void execute(DescribeArtifact args) {
-        LOGGER.trace("Executing against {}.", args);
+        LOGGER.debug("Executing against {}.", args);
 
         File file = new File(args.getFile());
         ArtifactDescription artifactDescription = createArtifactDescription(file);
         File outputFile = new File(args.getOutput());
         writeXML(artifactDescription, outputFile);
 
-        LOGGER.trace("Description saved in {}.", outputFile.getAbsolutePath());
+        LOGGER.info("Description saved in {}.", outputFile.getAbsolutePath());
     }
 
     public void execute(CreatePatch args) {
-        LOGGER.trace("Executing against {}.", args);
+        LOGGER.debug("Executing against {}.", args);
 
         ArtifactDescription sourceArtifactDescription = readArtifactDescription(new File(args.getDescription()));
         ArtifactDescription destinationArtifactDescription = createArtifactDescription(new File(args.getFile()));
@@ -52,11 +52,11 @@ public class ArtifactPatcher {
 
         zip(destinationDir, args.getOutput());
 
-        LOGGER.trace("Patch saved in {}.", args.getOutput());
+        LOGGER.info("Patch saved in {}.", args.getOutput());
     }
 
     public void execute(ApplyPatch args) {
-        LOGGER.trace("Executing against {}.", args);
+        LOGGER.debug("Executing against {}.", args);
 
         ArtifactDescription toBePatchedArtifactDescription = createArtifactDescription(new File(args.getFile()));
 
@@ -77,7 +77,7 @@ public class ArtifactPatcher {
 
         zip(patchedJarDir, args.getOutput());
 
-        LOGGER.trace("Patched JAR saved in {}.", args.getOutput());
+        LOGGER.info("Patched JAR saved in {}.", args.getOutput());
     }
 
 }

@@ -22,6 +22,10 @@ public class ChecksumUtil {
         } catch (IOException e) {
             throw new ArtifactPatcherException(UNABLE_TO_READ_INPUT_STREAM_FOR_CHECKSUM, e);
         }
+        return shasum(data);
+    }
+
+    public static String shasum(byte[] data) {
         return byteArray2Hex(SHASUM_MESSAGE_DIGEST.digest(data));
     }
 

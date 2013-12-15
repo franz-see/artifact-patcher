@@ -1,10 +1,12 @@
 package see.fa.artifactpatcher.models;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class FileArtifactDescription {
+public class FileArtifactDescription implements Comparable<FileArtifactDescription> {
+
     private final String name;
     private final String checksum;
 
@@ -47,5 +49,12 @@ public class FileArtifactDescription {
                 .append("name", getName())
                 .append("checksum", getChecksum())
                 .toString();
+    }
+
+    public int compareTo(FileArtifactDescription that) {
+        return new CompareToBuilder()
+                .append(this.getName(), that.getName())
+                .append(this.getChecksum(), that.getChecksum())
+                .toComparison();
     }
 }

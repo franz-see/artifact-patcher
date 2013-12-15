@@ -1,6 +1,8 @@
 package see.fa.artifactpatcher.util;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import see.fa.artifactpatcher.ArtifactPatcherException;
@@ -11,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -45,14 +48,18 @@ public class ArtifactDescriptionUtil {
 
             ArtifactDescription artifactDescription = new ArtifactDescription();
 
-            ZipEntry zipEntry = zipInputStream.getNextEntry();
+            File workingDirectory = FileUtil.createTempDirectory("ArtifactDescriptionUtil", "createArtifactDescription");
+            ZipUtil.unzip(file, workingDirectory);
+
+            LOGGER.trace("Exploded artifact is in {}.", workingDirectory.getAbsolutePath());
+
+            Iterator<File> fileIterator = FileUtils.iterateFiles(workingDirectory, FileFilterUtils.trueFileFilter(), FileFilterUtils.trueFileFilter());
             int counter = 1;
-            while(zipEntry != null) {
-                FileArtifactDescription fileArtifactDescription = new FileArtifactDescription(zipEntry.getName(), shasum(zipInputStream));
+            while (fileIterator.hasNext()) {
+                File fileEntry = fileIterator.next();
+                FileArtifactDescription fileArtifactDescription = new FileArtifactDescription(fileEntry.getName(), shasum(FileUtils.readFileToByteArray(fileEntry)));
                 LOGGER.trace("Processing ZipEntry #{} : {}", counter++, fileArtifactDescription);
                 artifactDescription.getFiles().add(fileArtifactDescription);
-
-                zipEntry = zipInputStream.getNextEntry();
             }
             return artifactDescription;
         } catch (IOException e) {
