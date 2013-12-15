@@ -2,6 +2,8 @@ package see.fa.artifactpatcher;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import see.fa.artifactpatcher.models.*;
 import see.fa.artifactpatcher.util.FileUtil;
 
@@ -18,13 +20,22 @@ public class ArtifactPatcher {
 
     public static final String PATCH_ARTIFACT_DESCRIPTION_XML = "artifact-description.xml";
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArtifactPatcher.class);
+
     public void execute(DescribeArtifact args) {
+        LOGGER.trace("Executing against {}.", args);
+
         File file = new File(args.getFile());
         ArtifactDescription artifactDescription = createArtifactDescription(file);
-        writeXML(artifactDescription, new File(args.getOutput()));
+        File outputFile = new File(args.getOutput());
+        writeXML(artifactDescription, outputFile);
+
+        LOGGER.trace("Description saved in {}.", outputFile.getAbsolutePath());
     }
 
     public void execute(CreatePatch args) {
+        LOGGER.trace("Executing against {}.", args);
+
         ArtifactDescription sourceArtifactDescription = readArtifactDescription(new File(args.getDescription()));
         ArtifactDescription destinationArtifactDescription = createArtifactDescription(new File(args.getFile()));
 
@@ -40,9 +51,13 @@ public class ArtifactPatcher {
         writeXML(destinationArtifactDescription, new File(destinationDir, PATCH_ARTIFACT_DESCRIPTION_XML));
 
         zip(destinationDir, args.getOutput());
+
+        LOGGER.trace("Patch saved in {}.", args.getOutput());
     }
 
     public void execute(ApplyPatch args) {
+        LOGGER.trace("Executing against {}.", args);
+
         ArtifactDescription toBePatchedArtifactDescription = createArtifactDescription(new File(args.getFile()));
 
         File workingDir = FileUtil.createTempDirectory("ArtifactPatcher", "ApplyPatch");
@@ -61,6 +76,8 @@ public class ArtifactPatcher {
         FileUtil.copyDirectory(patchJarDir, patchedJarDir, notFileFilter(new NameFileFilter(PATCH_ARTIFACT_DESCRIPTION_XML)));
 
         zip(patchedJarDir, args.getOutput());
+
+        LOGGER.trace("Patched JAR saved in {}.", args.getOutput());
     }
 
 }

@@ -1,6 +1,8 @@
 package see.fa.artifactpatcher.util;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import see.fa.artifactpatcher.ArtifactPatcherException;
 import see.fa.artifactpatcher.models.ArtifactDescription;
 import see.fa.artifactpatcher.models.FileArtifactDescription;
@@ -19,7 +21,9 @@ import static see.fa.artifactpatcher.util.ChecksumUtil.shasum;
 import static see.fa.artifactpatcher.util.XMLUtil.readXML;
 
 public class ArtifactDescriptionUtil {
-    
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArtifactDescriptionUtil.class);
+
     public static List<String> toFileNames(Collection<FileArtifactDescription> fileArtifactDescriptions) {
         List<String> fileNames = new LinkedList<String>();
         for (FileArtifactDescription fileArtifactDescription : fileArtifactDescriptions) {
@@ -42,14 +46,17 @@ public class ArtifactDescriptionUtil {
             ArtifactDescription artifactDescription = new ArtifactDescription();
 
             ZipEntry zipEntry = zipInputStream.getNextEntry();
+            int counter = 1;
             while(zipEntry != null) {
-                artifactDescription.getFiles().add(new FileArtifactDescription(zipEntry.getName(), shasum(zipInputStream)));
+                FileArtifactDescription fileArtifactDescription = new FileArtifactDescription(zipEntry.getName(), shasum(zipInputStream));
+                LOGGER.trace("Processing ZipEntry #{} : {}", counter++, fileArtifactDescription);
+                artifactDescription.getFiles().add(fileArtifactDescription);
 
                 zipEntry = zipInputStream.getNextEntry();
             }
             return artifactDescription;
         } catch (IOException e) {
-            throw new ArtifactPatcherException(String.format(UNABLE_TO_READ_ARTIFACT, new File(".").getAbsolutePath()), e);
+            throw new ArtifactPatcherException(String.format(UNABLE_TO_READ_ARTIFACT, file.getAbsolutePath()), e);
         } finally {
             IOUtils.closeQuietly(zipInputStream);
         }

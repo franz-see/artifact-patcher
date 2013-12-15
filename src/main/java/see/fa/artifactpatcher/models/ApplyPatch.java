@@ -2,6 +2,7 @@ package see.fa.artifactpatcher.models;
 
 import com.beust.jcommander.Parameter;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import static org.apache.commons.io.FilenameUtils.getExtension;
 import static see.fa.artifactpatcher.models.ParameterNames.*;
@@ -43,5 +44,14 @@ public class ApplyPatch {
 
     public String getPatch() {
         return patch;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("file", getFile())
+                .append("patch", getPatch())
+                .append("output", getOutput())
+                .toString();
     }
 }

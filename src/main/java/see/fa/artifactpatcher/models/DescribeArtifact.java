@@ -1,6 +1,7 @@
 package see.fa.artifactpatcher.models;
 
 import com.beust.jcommander.Parameter;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.File;
 
@@ -31,5 +32,13 @@ public class DescribeArtifact {
 
     public String getFile() {
         return file;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("file", getFile())
+                .append("output", getOutput())
+                .toString();
     }
 }
